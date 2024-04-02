@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import express from "express";
 import cors from "cors";
 import taskRouter from "./src/routes/task.js";
+import taskGroupRouter from "./src/routes/task_group.js";
 
 const app = express();
 app.use(cors());
@@ -10,6 +11,7 @@ app.use(express.json());
 
 // ===================po visu konfigutaciju panaudojame taskRouteri
 app.use(taskRouter);
+app.use(taskGroupRouter);
 
 // PRIES endpointus BUTINAI:
 mongoose
