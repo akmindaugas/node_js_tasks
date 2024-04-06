@@ -9,7 +9,7 @@ import {
 const router = express.Router();
 
 router.get("/flights/:id", GET_FLIGHT_BY_ID);
-router.post("/flights", CREATE_FLIGHT);
+router.post("/flights/:groupId", CREATE_FLIGHT);
 router.get("/flights", GET_ALL_FLIGHTS);
 router.delete("/flights/:id", DELETE_FLIGHT_BY_ID);
 router.put("/flights/:id", UPDATE_FLIGHT_BY_ID);

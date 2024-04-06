@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import dataGroupModel from "../models/task_group.js";
 
 // =======================================================
@@ -6,9 +7,10 @@ import dataGroupModel from "../models/task_group.js";
 const CREATE_FLIGHT_GROUPS = async (req, res) => {
   try {
     const group = new dataGroupModel({
-      id: req.body.id,
+      // id: req.body.id,
+      title: req.body.title,
       date: req.body.date,
-      // fligts_ids: req.body.flights_ids,
+      flights_ids: [],
     });
 
     const response = await group.save();
@@ -24,7 +26,19 @@ const CREATE_FLIGHT_GROUPS = async (req, res) => {
 // ==================================================================
 const GET_ALL_FLIGHTS_GROUPS = async (req, res) => {
   try {
-    const flights = await dataGroupModel.find();
+    const flights = await dataGroupModel
+      .aggregate([
+        {
+          $lookup: {
+            from: "flights",
+            localField: "flights_ids",
+            foreignField: "id",
+            as: "flights",
+          },
+        },
+        { $match: { _id: new mongoose.Types.ObjectId(req.params.id) } },
+      ])
+      .exec();
 
     return res.json({ flights: flights });
   } catch (err) {

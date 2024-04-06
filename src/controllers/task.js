@@ -1,4 +1,6 @@
+import { v4 as uuidv4 } from "uuid";
 import dataModel from "../models/task.js";
+import dataGroupModel from "../models/task_group.js";
 
 // let flights = [];
 // =======================================================
@@ -26,8 +28,9 @@ const GET_FLIGHT_BY_ID = async (req, res) => {
 const CREATE_FLIGHT = async (req, res) => {
   try {
     const flight = new dataModel({
-      // verciame ivedama id i stringa, kad veliau ir gristu stringas, atliekant tikus veiksmus. kitaip gris number
-      id: req.body.id,
+      // verciame ivedama id i stringa, kad veliau ir gristu stringas, atliekant tikus veiksmus. kitaip gris number, 53 eilute
+      // id: req.body.id,
+      id: uuidv4(),
       price: req.body.price,
       departureCity: req.body.departureCity,
       destinationCity: req.body.destinationCity,
@@ -48,8 +51,21 @@ const CREATE_FLIGHT = async (req, res) => {
     //   // .status(201)
     //   // .json({status: "flight "})
     // });
-    const response = await flight.save();
+    // ===========================================================
+    // workaroundas konvertuoti mongoo id i paprasta stringa
+    // uznaudojus uuid sita koda triname
+    // flight.id = flight._id.toString();
+    // const response = await flight.save();
+    // ----------------------------------------------------
+    // sita eilute naudojame, jeigu workaroundas nedirba
+    // const response = await flight.save();
+    // ====================================================
     // flights.push(flight);
+    // sukurta fliht pridedame i flight/task grupe.
+    await dataGroupModel.findByIdAndUpdate(req.params.groupId, {
+      $push: { flight_ids: flight.id },
+    });
+
     return res
       .status(201)
       .json({ status: "Flight was created", response: response });
