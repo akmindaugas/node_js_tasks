@@ -26,6 +26,7 @@ app.use((req, res) => {
   return res.status(404).json({ status: "Endpoint does not exist" });
 });
 
-app.listen(process.env.PORT, () => {
-  console.log(`APP ALIVE AND RUNNING ON PORT ${process.env.PORT}`);
-});
+// app.listen(process.env.PORT, () => {
+//   console.log(`APP ALIVE AND RUNNING ON PORT ${process.env.PORT}`);
+app.listen(3000);
+console.log(`APP ALIVE AND RUNNING ON PORT 3000`);

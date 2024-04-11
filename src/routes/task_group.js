@@ -6,6 +6,7 @@ import {
 const router = express.Router();
 
 router.post("/group", CREATE_FLIGHT_GROUPS);
-router.get("/group", GET_ALL_FLIGHTS_GROUPS);
+router.get("/group/:id", GET_ALL_FLIGHTS_GROUPS);
+// TODO: add task group deleting endpoint
 
 export default router;
