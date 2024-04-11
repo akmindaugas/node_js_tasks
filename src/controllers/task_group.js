@@ -24,7 +24,21 @@ const CREATE_FLIGHT_GROUPS = async (req, res) => {
 // ==================================================================
 const GET_ALL_FLIGHTS_GROUPS = async (req, res) => {
   try {
-    const flights = await dataGroupModel.find();
+    // sita eilute veikia si find'u
+    // const flights = await dataGroupModel.find();
+    // pakeiciame find i aggregate
+    const flights = await dataGroupModel
+      .aggregate([
+        {
+          $lookup: {
+            from: "flights",
+            localField: "id",
+            foreignField: "id",
+            as: "flygg",
+          },
+        },
+      ])
+      .exec();
 
     return res.json({ flights: flights });
   } catch (err) {

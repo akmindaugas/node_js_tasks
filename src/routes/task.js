@@ -8,6 +8,7 @@ import {
 } from "../controllers/task.js";
 const router = express.Router();
 
+// i koki endpointa kreipiesi / kokia funkcija bus aktyvuota
 router.get("/flights/:id", GET_FLIGHT_BY_ID);
 router.post("/flights", CREATE_FLIGHT);
 router.get("/flights", GET_ALL_FLIGHTS);
