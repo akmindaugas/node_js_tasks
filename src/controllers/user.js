@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcryptjs";
 import UserModel from "../models/user.js";
+import 
 
 const SIGN_UP = async (req, res) => {
   try {
@@ -40,8 +41,16 @@ const LOG_IN = async (req, res) => {
     );
 
     if (!isPasswordMatch) {
-      return res.status(404).json({ message: "user data is bad" });
+      return res.status(500).json({ message: "user data is bad" });
+    };
+
+    // kuriame java web tokena - jasonwebtoken lib. pagal user emaila ir id
+    const jwt_token = jwt.sign({email: user.email, user_id: user.id}, "password123",
+      {
+      expiresIn: "20h",
     }
+  );
+
 
     console.log(user);
 
