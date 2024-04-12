@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcryptjs";
 import UserModel from "../models/user.js";
-import 
+import jwt from "jsonwebtoken";
 
 const SIGN_UP = async (req, res) => {
   try {
@@ -42,19 +42,18 @@ const LOG_IN = async (req, res) => {
 
     if (!isPasswordMatch) {
       return res.status(500).json({ message: "user data is bad" });
-    };
+    }
 
     // kuriame java web tokena - jasonwebtoken lib. pagal user emaila ir id
-    const jwt_token = jwt.sign({email: user.email, user_id: user.id}, "password123",
+    const jwt_token = jwt.sign(
+      { email: user.email, user_id: user.id },
+      process.env.JWT_SECRET,
       {
-      expiresIn: "20h",
-    }
-  );
+        expiresIn: "20h",
+      }
+    );
 
-
-    console.log(user);
-
-    return res.json({ response: "ok" });
+    return res.json({ jwt: jwt_token, message: "user logged in successfully" });
   } catch (err) {
     console.log("HANDLED ERROR: ", err);
     return res.status(500).json({ message: "error happend" });
